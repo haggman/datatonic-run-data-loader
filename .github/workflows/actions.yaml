@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - main
+env:
+  PROJECT_ID: dt-patrick-project-dev
 
 jobs:
   # First, get the container into the GCR
@@ -15,6 +17,19 @@ jobs:
         with:
           gcloud_service_key: ${{ secrets.GCLOUD_SERVICE_KEY }} # can be base64 encoded or plain text
           registry: gcr.io
-          project_id: dt-patrick-project-dev
+          project_id: ${{ env.PROJECT_ID }}
           image_name: forecast-data-loader
           image_tag: latest
+  deploy-to-cloud-run:
+    steps:
+      - id: 'auth'
+        uses: 'google-github-actions/auth@v0'
+        with:
+          credentials_json: ${{ secrets.GCLOUD_SERVICE_KEY }}
+
+      - name: 'Deploy to Cloud Run'
+        uses: 'google-github-actions/deploy-cloudrun@v0'
+        with:
+          image: 'gcr.io/${{ env.PROJECT_ID }}/forecast-data-loader:latest'
+          service: 'forecast-data-loader'
+          region: "europe-west2"
