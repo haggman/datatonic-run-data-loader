@@ -20,8 +20,7 @@ jobs:
           project_id: ${{ env.PROJECT_ID }}
           image_name: forecast-data-loader
           image_tag: latest
-  deploy-to-cloud-run:
-    steps:
+    # Now, get it into Cloud Run
       - id: 'auth'
         uses: 'google-github-actions/auth@v0'
         with:
