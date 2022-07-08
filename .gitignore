@@ -1,3 +1,6 @@
+# A few extras
+test_main.http
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

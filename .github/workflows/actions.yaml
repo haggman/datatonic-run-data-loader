@@ -1,0 +1,20 @@
+name: Update Cloud Run data loader
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  # First, get the container into the GCR
+  build-and-push-to-gcr:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: RafikFarhad/push-to-gcr-github-action@v4.1
+        with:
+          gcloud_service_key: ${{ secrets.GCLOUD_SERVICE_KEY }} # can be base64 encoded or plain text
+          registry: gcr.io
+          project_id: dt-patrick-project-dev
+          image_name: forecast-data-loader
+          image_tag: latest
