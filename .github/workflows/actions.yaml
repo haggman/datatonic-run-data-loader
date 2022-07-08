@@ -41,4 +41,5 @@ jobs:
             --platform "managed" \
             --quiet \
             --max-instances 10 \
-            --service-account 'forecast-accessor@${{ env.PROJECT_ID }}.iam.gserviceaccount.com'
+            --service-account 'forecast-accessor@${{ env.PROJECT_ID }}.iam.gserviceaccount.com' \
+            --ingress internal
