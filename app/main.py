@@ -9,7 +9,7 @@ app = FastAPI()
 
 @app.get("/")
 async def root():
-    service_url = 'https://grad-forecast-api-ist6wm4moa-nw.a.run.app/'
+    service_url = 'https://grad-forecast-api-ist6wm4moa-nw.a.run.app'
     req = urllib.request.Request(service_url)
 
     auth_req = google.auth.transport.requests.Request()
@@ -19,9 +19,15 @@ async def root():
         response = urllib.request.urlopen(req)
         logging.info('Response: ', response.read())
         return {"message": "Forecast API call success"}
-    except:
+    except urllib.error.URLError as e:
+        logging.info("Problem with the URL")
         return {
-            "message": "Error calling Forecast API"
+            "message": "Error calling Forecast API, bad URL"
+        }
+    except urllib.error.HTTPError as e:
+        logging.info(f"Problem with the HTTP request. Error code: {e.code}, response: {e.read()}")
+        return {
+            "message": "Error calling Forecast API, bad HTTP request"
         }
 
 
