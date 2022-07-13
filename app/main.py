@@ -9,7 +9,7 @@ app = FastAPI()
 
 @app.get("/")
 async def root():
-    service_url = 'https://grad-forecast-api-ist6wm4moa-nw.a.run.app'
+    service_url = 'https://grad-forecast-api-ist6wm4moa-nw.a.run.app/api/v1/projects'
     req = urllib.request.Request(service_url)
 
     auth_req = google.auth.transport.requests.Request()
