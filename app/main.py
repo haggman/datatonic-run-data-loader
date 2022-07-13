@@ -20,7 +20,7 @@ async def root():
         logging.info('Response: ', response.read())
         return {"message": "Forecast API call success"}
     except urllib.error.URLError as e:
-        logging.info("Problem with the URL")
+        logging.info(f"Problem with the URL. Response: {e.read()}")
         return {
             "message": "Error calling Forecast API, bad URL"
         }
