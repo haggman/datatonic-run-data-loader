@@ -30,9 +30,9 @@ async def root():
             "message": "Forecast API call happy"
         }
     except BaseException as e:
-        print(f"Problem with the URL. Response: {e.read()}")
+        print(f"Problem with the URL. Response: {e}")
         return {
-            "message": f"Forecast API call sad: {e.read()}"
+            "message": f"Forecast API call sad: {e}"
         }
 
 
