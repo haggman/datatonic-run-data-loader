@@ -17,8 +17,12 @@ async def root():
     req.add_header("Authorization", f"Bearer {id_token}")
     try:
         response = urllib.request.urlopen(req)
-        logging.info('Response: ', response.read())
-        return {"message": "Forecast API call success"}
+        resp_content = response.read()
+        print(resp_content)
+        return {
+            "message": "Forecast API call success",
+            "response": resp_content
+        }
     except urllib.error.URLError as e:
         logging.info(f"Problem with the URL. Response: {e.read()}")
         return {
