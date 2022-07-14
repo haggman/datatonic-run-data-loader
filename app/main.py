@@ -3,6 +3,8 @@ import logging
 import urllib
 import google.auth.transport.requests
 import google.oauth2.id_token
+import os
+from google.cloud import storage
 
 app = FastAPI()
 
@@ -18,20 +20,19 @@ async def root():
     try:
         response = urllib.request.urlopen(req)
         resp_content = response.read()
-        print(resp_content)
+
+        staging_bucket_name = os.environ.get('STAGING_BUCKET')
+        client = storage.Client()
+        bucket = client.get_bucket('bucket-id')
+        blob = bucket.blob('projects.json')
+        blob.upload_from_string(data=resp_content, content_type='application/json')
         return {
-            "message": "Forecast API call success",
-            "response": resp_content
+            "message": "Forecast API call happy"
         }
-    except urllib.error.URLError as e:
-        logging.info(f"Problem with the URL. Response: {e.read()}")
+    except BaseException as e:
+        print(f"Problem with the URL. Response: {e.read()}")
         return {
-            "message": "Error calling Forecast API, bad URL"
-        }
-    except urllib.error.HTTPError as e:
-        logging.info(f"Problem with the HTTP request. Error code: {e.code}, response: {e.read()}")
-        return {
-            "message": "Error calling Forecast API, bad HTTP request"
+            "message": f"Forecast API call sad: {e.read()}"
         }
 
 
