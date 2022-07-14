@@ -23,7 +23,7 @@ async def root():
 
         staging_bucket_name = os.environ.get('STAGING_BUCKET')
         client = storage.Client()
-        bucket = client.get_bucket('bucket-id')
+        bucket = client.bucket('bucket-id')
         blob = bucket.blob('projects.json')
         blob.upload_from_string(data=resp_content, content_type='application/json')
         return {
