@@ -13,7 +13,7 @@ app = FastAPI()
 
 @app.get("/")
 async def root():
-    def api_call_helper(api_path, file_name):
+    def api_call_helper(api_path):
         service_url = f'https://grad-forecast-api-ist6wm4moa-nw.a.run.app/api{api_path}'
         req = urllib.request.Request(service_url)
         auth_req = google.auth.transport.requests.Request()
@@ -24,18 +24,22 @@ async def root():
         resp_content = response.read().decode()
         # Convert from array of objects to JSONL format
         file_json = json.loads(resp_content)
-        json_list = [json.dumps(record) for record in file_json]
-        text_jsonl_str = '\n'.join(json_list)
+        return file_json
+
+    def write_to_gcs(text_jsonl_str, file_name):
         # Upload to GCS
         staging_bucket_name = os.environ.get('STAGING_BUCKET')
         client = storage.Client()
         bucket = client.bucket(staging_bucket_name)
         blob = bucket.blob(file_name)
-        blob.upload_from_string(data=file_json, content_type='application/json')
+        blob.upload_from_string(data=text_jsonl_str, content_type='application/json')
 
     try:
-        # api_call_helper('/v1/projects', 'projects.json')
-        api_call_helper('/v4/tasks', 'tasks.json')
+        projects_json_file = api_call_helper('/v1/projects')
+        json_list = [json.dumps(record) for record in projects_json_file]
+        text_jsonl_str = '\n'.join(json_list)
+        write_to_gcs(text_jsonl_str, "projects.json")
+        # api_call_helper('/v4/tasks', 'tasks.json')
         return {
             "message": "Forecast API call happy"
         }
@@ -44,3 +48,6 @@ async def root():
         return {
             "message": f"Forecast API call sad: {e}"
         }
+
+
+
