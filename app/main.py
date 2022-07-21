@@ -21,7 +21,7 @@ async def root():
     req.add_header("Authorization", f"Bearer {id_token}")
     try:
         response = urllib.request.urlopen(req)
-        resp_content = response.read.decode()
+        resp_content = response.read().decode()
         pretty_resp = json.dumps(resp_content, indent=2)
         staging_bucket_name = os.environ.get('STAGING_BUCKET')
         client = storage.Client()
