@@ -22,7 +22,7 @@ async def root():
     try:
         response = urllib.request.urlopen(req)
         resp_content = response.read()
-        file_json = json.dumps(resp_content)
+        file_json = json.load(resp_content)
         json_list = [json.dumps(record) for record in file_json]
         text_jsonl_str = '\n'.join(json_list)
         staging_bucket_name = os.environ.get('STAGING_BUCKET')
