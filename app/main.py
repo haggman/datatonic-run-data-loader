@@ -13,9 +13,9 @@ app = FastAPI()
 
 @app.get("/")
 async def root():
-    def api_call_helper(service_url, file_name):
+    def api_call_helper(api_path, file_name):
+        service_url = f'https://grad-forecast-api-ist6wm4moa-nw.a.run.app/api{api_path}'
         req = urllib.request.Request(service_url)
-
         auth_req = google.auth.transport.requests.Request()
         id_token = google.oauth2.id_token.fetch_id_token(auth_req, service_url)
         req.add_header("Authorization", f"Bearer {id_token}")
@@ -34,8 +34,7 @@ async def root():
         blob.upload_from_string(data=text_jsonl_str, content_type='application/json')
 
     try:
-        api_call_helper('https://grad-forecast-api-ist6wm4moa-nw.a.run.app/api/v1/projects',
-                        'projects.json')
+        api_call_helper('/v1/projects', 'projects.json')
         return {
             "message": "Forecast API call happy"
         }
