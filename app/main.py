@@ -2,7 +2,7 @@ import json
 
 from fastapi import FastAPI
 import logging
-import urllib
+import urllib.request
 import google.auth.transport.requests
 import google.oauth2.id_token
 import os
@@ -21,8 +21,8 @@ async def root():
     req.add_header("Authorization", f"Bearer {id_token}")
     try:
         response = urllib.request.urlopen(req)
-        resp_content = response.read()
-        file_json = json.load(resp_content)
+        resp_content = response.read().decode()
+        file_json = json.loads(resp_content)
         json_list = [json.dumps(record) for record in file_json]
         text_jsonl_str = '\n'.join(json_list)
         staging_bucket_name = os.environ.get('STAGING_BUCKET')
