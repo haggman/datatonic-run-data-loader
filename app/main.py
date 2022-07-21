@@ -42,7 +42,7 @@ async def root():
         write_to_gcs(text_jsonl_str, "projects.json")
 
         # Process tasks
-        tasks_json_file = api_call_helper('/v4/tasks')
+        tasks_json_file = api_call_helper('/v4/tasks?pageNumber=2&pageSize=1000')
         write_to_gcs(json.dumps(tasks_json_file), 'tasks.json')
 
         return {
