@@ -23,12 +23,13 @@ async def root():
         response = urllib.request.urlopen(req)
         resp_content = response.read().decode()
         file_json = json.dumps(resp_content)
-        text_jsonl_str = '\n'.join(str(row) for row in file_json)
+        json_list = [json.dumps(record) for record in file_json]
+        text_jsonl_str = '\n'.join(json_list)
         staging_bucket_name = os.environ.get('STAGING_BUCKET')
         client = storage.Client()
         bucket = client.bucket(staging_bucket_name)
         blob = bucket.blob('projects.json')
-        blob.upload_from_string(data=resp_content, content_type='application/json')
+        blob.upload_from_string(data=text_jsonl_str, content_type='application/json')
         return {
             "message": "Forecast API call happy"
         }
