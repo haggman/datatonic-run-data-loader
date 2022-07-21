@@ -28,7 +28,7 @@ async def root():
         client = storage.Client()
         bucket = client.bucket(staging_bucket_name)
         blob = bucket.blob('projects.json')
-        blob.upload_from_string(data=text_jsonl_str, content_type='application/json')
+        blob.upload_from_string(data=resp_content, content_type='application/json')
         return {
             "message": "Forecast API call happy"
         }
