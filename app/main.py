@@ -35,11 +35,16 @@ async def root():
         blob.upload_from_string(data=text_jsonl_str, content_type='application/json')
 
     try:
+        # Process projects
         projects_json_file = api_call_helper('/v1/projects')
         json_list = [json.dumps(record) for record in projects_json_file]
         text_jsonl_str = '\n'.join(json_list)
         write_to_gcs(text_jsonl_str, "projects.json")
-        # api_call_helper('/v4/tasks', 'tasks.json')
+
+        # Process tasks
+        tasks_json_file = api_call_helper('/v4/tasks')
+        write_to_gcs(json.dumps(tasks_json_file), 'tasks.json')
+
         return {
             "message": "Forecast API call happy"
         }
