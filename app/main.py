@@ -21,13 +21,13 @@ async def root():
     req.add_header("Authorization", f"Bearer {id_token}")
     try:
         response = urllib.request.urlopen(req)
-        resp_content = response.decode()
+        resp_content = response.read.decode()
         pretty_resp = json.dumps(resp_content, indent=2)
         staging_bucket_name = os.environ.get('STAGING_BUCKET')
         client = storage.Client()
         bucket = client.bucket(staging_bucket_name)
         blob = bucket.blob('projects.json')
-        blob.upload_from_string(data=pretty_resp, content_type='application/json')
+        blob.upload_from_string(data=resp_content, content_type='application/json')
         return {
             "message": "Forecast API call happy"
         }
