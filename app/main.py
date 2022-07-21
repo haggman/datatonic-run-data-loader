@@ -35,6 +35,7 @@ async def root():
 
     try:
         api_call_helper('/v1/projects', 'projects.json')
+        api_call_helper('/v3/tasks', 'tasks.json')
         return {
             "message": "Forecast API call happy"
         }
