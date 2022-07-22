@@ -43,7 +43,7 @@ async def root():
 
         # Process tasks
         tasks_json_file = api_call_helper('/v3/tasks')
-        json_list = [json.dumps(record) for record in tasks_json_file['pageContents']]
+        json_list = [json.dumps(record) for record in tasks_json_file]
         tasks_jsonl_str = '\n'.join(json_list)
         write_to_gcs(tasks_jsonl_str, 'tasks.json')
 
